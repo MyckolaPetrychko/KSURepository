@@ -1,24 +1,14 @@
-
+<head><link rel = "stylesheet" href = "css/semantic.min.css"></head>
 <div id="premial">
-    <input class="search" type="text" placeholder="Search">
+<div class="ui huge icon input" style = "margin-top: 20px;">
+  <input class="search" type="text" placeholder="Search">
+</div>
 
+ 
 
-    
-    <br><br><br><br><br><table class="table table-striped table-bordered">
-        <thead> 
-            <tr><th><buttun class="sort" data-sort="id">ID </buttun></th>
-            <th><buttun class="sort" data-sort="theme">Автор ▲▼</buttun></th>
-            <th><buttun class="sort" data-sort="author">Тема дисертації </buttun></th>
-            <th><buttun class="sort" data-sort="year">Рік</buttun></th>
-            <th><buttun class="sort asc" datd-sort="number">Додаткова інформація</buttun></th>
-			<th><buttun class="sort asc" datd-sort="number">Спеціальність</buttun></th>
-            <th><buttun class="sort asc" datd-sort="number">Скачати</buttun></th>
-        </tr></thead>
-        
-<tbody class="list">
-			<tr>
-			<td>
-			<?php
+  <table class="ui celled table">
+  
+		<?php
 				
 				require_once('/settings.php');
 				$stm1 = $pdo->prepare("use ksu");
@@ -49,12 +39,30 @@
 		$res = $stm1->fetch();
 		$count += $res['count'];
 		
-		echo "<tr><td>Усього дисертацій:</td> <td>$count</td></tr>";
+		echo "<tr><td>Усього дисертацій:</td> <td>$count</td><td></td><td></td><td></td><td></td><td></td></tr>";
+		?>
+  
+        <thead> 
+            <tr><th><buttun class="sort" data-sort="id">ID </buttun></th>
+            <th><buttun class="sort" data-sort="theme">Автор ▲▼</buttun></th>
+            <th><buttun class="sort" data-sort="author">Тема дисертації </buttun></th>
+            <th><buttun class="sort" data-sort="year">Рік</buttun></th>
+            <th><buttun class="sort asc" datd-sort="number">Додаткова інформація</buttun></th>
+			<th><buttun class="sort asc" datd-sort="number">Спеціальність</buttun></th>
+            <th><buttun class="sort asc" datd-sort="number">Скачати</buttun></th>
+        </tr></thead>
 		
-		
+        
+<tbody class="list">
+			
+			<?php
+				
+				require_once('/settings.php');
+				$stm1 = $pdo->prepare("use ksu");
+				$stm1->execute();		
 		$stm = $pdo->prepare("SELECT * FROM `repo_nbuv_math`");
 		$stm->execute();
-        echo '<br><tr><td>01.05.02</td><td>Математичне моделювання</td></tr>';
+        echo '<br><tr><td>01.05.02</td><td>Математичне моделювання</td><td></td><td></td><td></td><td></td><td></td></tr>';
 		while ($res=$stm->fetch())
 		{
 			echo "
@@ -73,7 +81,7 @@
 		
 		$stm = $pdo->prepare("SELECT * FROM `repo_nbuv_it`");
 		$stm->execute();
-        echo '<br><tr><td>05.13.23</td><td>Інформаційні технології</td></tr>';
+        echo '<br><tr><td>05.13.23</td><td>Інформаційні технології</td><td></td><td></td><td></td><td></td><td></td></tr>';
 		while ($res=$stm->fetch())
 		{
 			echo "
@@ -91,7 +99,8 @@
 		
 		$stm = $pdo->prepare("SELECT * FROM `repo_nbuv_intelligence`");
 		$stm->execute();
-        echo '<br><tr><td>05.13.06</td><td>Штучний інтелект</td></tr>';
+        echo '<tr><td>05.13.06</td><td>Штучний інтелект</td><td></td><td></td><td></td><td></td><td></td></tr>';
+		echo '';
 		while ($res=$stm->fetch())
 		{
 			echo "
@@ -109,7 +118,7 @@
 		
 		$stm = $pdo->prepare("SELECT * FROM `repo_shevchenko`");
 		$stm->execute();
-        echo '<br><tr><td>Університет</td><td>Шевченка</td></tr>';
+        echo '<tr><td>Університет</td><td>Шевченка</td><td></td><td></td><td></td><td></td><td></td></tr>';
 		while ($res=$stm->fetch())
 		{
 			if ($res['speciality'] == '01.05.02') $s = 'Математичне моделювання';
@@ -130,7 +139,7 @@
 		
 		$stm = $pdo->prepare("SELECT * FROM `repo_ONPU`");
 		$stm->execute();
-        echo '<br><tr><td>Одеський </td><td>політехнічний</td><td>університет</td></tr>';
+        echo '<tr><td>Одеський </td><td>політехнічний</td><td>університет</td><td></td><td></td><td></td><td></td></tr>';
 		while ($res=$stm->fetch())
 		{
 				if ($res['speciality'] == '01.05.02') $s = 'Математичне моделювання';
@@ -151,8 +160,7 @@
 			
 				
 			?>
-			</td>
-		</tr>
+	
 		</tbody>
     </table>
 </div>
