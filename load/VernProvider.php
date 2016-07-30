@@ -37,12 +37,14 @@
 		$download_count = 0;
 		$tmp1 = $content;
 		$p1 = strpos($content, '<a title');
+		
 		while($p1 > 0){
 			if ($i){
 				$p1 = strpos($content, '<a title=');
 			}
 			$content = substr($content, $p1);
 			$p2 = strpos($content, '</a>');
+		
 			$tmp = substr($content, 0, $p2);
 			$content = substr($content, $p2);
 			
@@ -63,6 +65,7 @@
 			
 			$i++;
 		}
+		
 		
 		
 		// speciality
@@ -118,6 +121,7 @@
 		$tmp4 = $tmp3;
 		$pattern = '/ \/.*\./';
 		$c = '<font color="red"';
+		
 		$p1 = strpos($tmp3, $c);
 		if (!$p1) { $c = '</b>:'; $p1 = strpos($tmp3, $c); $pattern = '/:.*\./'; }
 		$i=0;
@@ -134,6 +138,43 @@
 			//echo $info[$i].'<br>';
 			$i++;
 		}
+		
+		
+		// type
+		$a =  '<a title';
+		
+		if (preg_match("/05.13.06/", $url) OR preg_match("/05.13.23/", $url)){
+			$c = "<p style=\"text-align:justify";
+		}else $c = '<font color="red"';
+		
+		$pattern = "/канд./";
+		$p1 = 1;
+		$i=0;
+		$type = array();
+	
+		while($p1 > 0){
+			$p1 = strpos($tmp4, $a);
+			$tmp4 = substr($tmp4, $p1);
+			
+			$p2 = strpos($tmp4, $c);
+			
+			$tmp = substr($tmp4, 0, $p2);
+			$tmp4 = substr($tmp4, $p2);
+			
+			
+			if (preg_match($pattern, $tmp, $row)){
+				$type[$i] = "Кандидатська";
+				$i++;
+			}else if (preg_match("/д-ра/", $tmp, $row)){
+				$type[$i] = "Докторська";
+				$i++;
+			}
+			
+			
+		}
+	
+	
+	
 		//echo "<br>!!!$size<br><br>";
 		
 		// insert into db
@@ -147,7 +188,7 @@
 		for ($j = 0; $j < $size; $j++){
 					$p = addslashes($author[$j]);
 					$p1 = addslashes($title[$j]);
-					$p2 = addslashes($speciality[$j]);
+					$p2 = addslashes($speciality[$j]) . '/' . $type[$j];
 					$p3 = addslashes($year[$j]);
 					$p4 = addslashes($info[$j]);
 					$p5 = addslashes($download[$j]);

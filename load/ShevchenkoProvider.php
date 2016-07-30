@@ -1,4 +1,5 @@
 <?php
+require_once('BasicProvider.php');
 	class ShevchenkoProvider extends BasicProvider{
 		public function parse($url, $pdo, $table){
 			error_reporting(E_ERROR | E_PARSE);
@@ -17,7 +18,7 @@
        foreach ($authors as $author) {
            $a[$i] = $author->nodeValue."\t";
 		  // echo $a[$i];
-		   
+		  
 		   if ($i < 9){
 			   $n[$i] = substr($a[$i], 0, 1);
 			   $a[$i] = substr($a[$i], 2);
@@ -31,6 +32,7 @@
 			   $a[$i] = substr($a[$i], 4);
 			
 		   }
+	
 		   $i++;
  
        }
@@ -52,11 +54,20 @@
 		$str = array();
 		$row;
 		$i = 0;
+		$type = array();
        foreach ($spaner as $rows) {
            preg_match($pattern, $rows->nodeValue, $row);
+		   if (preg_match('/кандидат/', $rows->nodeValue, $row1)){
+			   $type[$i] = "Кандидатська";
+		   }else {
+			   $type[$i] = "Докторська";
+		   }
+		   echo $type[$i]. ' ' . $i . '<br>';
 		   $str[$i] = $row;
 		   $i++;
        }
+	   	
+	   
 	   $k = 0;
 	  for($i = 0; $i < count($str); $i++){
 	  for ($j = 0; $j < count($str[$i]); $j++) { $spec[$k] =  $str[$i][$j]; $k++; }
@@ -112,14 +123,17 @@
 		$i = 0;
 
 		for ($j = 0; $j < count($n); $j++){
+	
 					$p = addslashes($a[$j]);
 					$p1 = addslashes($res[$j]);
 					$p2 = addslashes($spec[$j]);
 					$p3 = addslashes($link[$j]);
 					if ($p2 == '01.05.02' || $p2 == '05.13.06' || $p2 == '05.13.23'){
+						$p2 = $p2 . '/' . $type[$j];
 						if (hasRow($p1, $pdo, 'repo_shevchenko') === true){
 								$stm1 = $pdo->prepare("INSERT INTO `repo_shevchenko` VALUES(NULL, '$p','$p1', '$p3', '$p2', '$year[$j]')");
 								$stm1->execute();
+							
 						}
 					}
 		}	
