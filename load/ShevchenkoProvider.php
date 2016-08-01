@@ -1,19 +1,28 @@
 <?php
 require_once('BasicProvider.php');
 	class ShevchenkoProvider extends BasicProvider{
-		public function parse($url, $pdo, $table){
+		private $dom;
+		public $basic;
+
+		public function load($url){
 			error_reporting(E_ERROR | E_PARSE);
 			$path = $url; //search with connection to the internet
 			//$path = 'sheva.htm';
-			$html = file_get_contents($path);
-		   $dom = new DOMDocument;
-		   $dom->loadHTML($html);
+			$content = file_get_contents($path);
+			$this->basic = new BasicProvider();
+			$this->basic->content = $content;
+			$this->dom = new DOMDocument;
+			$this->dom->loadHTML($content);
 
+		}
+
+		public function parse(){
+			
 		#get auhors
 
 		//require_once ('/settings.php');
        $tag1 = 'strong';
-       $authors = $dom->getElementsByTagName($tag1);
+       $authors = $this->dom->getElementsByTagName($tag1);
 		$i = 0;
        foreach ($authors as $author) {
            $a[$i] = $author->nodeValue."\t";
@@ -30,9 +39,7 @@ require_once('BasicProvider.php');
 		   }else{
 			   $n [$i]= substr($a[$i], 0, 3);
 			   $a[$i] = substr($a[$i], 4);
-			
 		   }
-	
 		   $i++;
  
        }
@@ -40,7 +47,7 @@ require_once('BasicProvider.php');
 		//#get all materials
 
        $classname="book_list_item";
-       $finder = new DomXPath($dom);
+       $finder = new DomXPath($this->dom);
        $spaner = $finder->query("//*[contains(@class, '$classname')]");
         
        // foreach ($spaner as $description) {
@@ -62,7 +69,7 @@ require_once('BasicProvider.php');
 		   }else {
 			   $type[$i] = "Докторська";
 		   }
-		   echo $type[$i]. ' ' . $i . '<br>';
+		  
 		   $str[$i] = $row;
 		   $i++;
        }
@@ -89,9 +96,9 @@ require_once('BasicProvider.php');
 		  }
 	  
 	  
-	       $p1 = strpos($html, '<div class="book_list_item"');
-        $p2 = strpos($html, '</div></div></div>');
-		$newContent = substr($html, $p1, $p2-$p1);
+	       $p1 = strpos($this->basic->content, '<div class="book_list_item"');
+        $p2 = strpos($this->basic->content, '</div></div></div>');
+		$newContent = substr($this->basic->content, $p1, $p2-$p1);
 		preg_match_all('/href=\".*\"/', $newContent, $refs);
 		$p = 0;
 		for ($i = 0; $i < count($refs); $i++){
@@ -101,7 +108,7 @@ require_once('BasicProvider.php');
 		}
 }
 		#get title
-       $b = $html;
+       $b = $this->basic->content;
        $p2 = '</strong>';
        $p1 = '</a>';
        $k = 0;
@@ -114,30 +121,16 @@ require_once('BasicProvider.php');
                $b = substr($b, $num2);
                $k++;
        }while($num1);
-	   
-	    $stm1 = $pdo->prepare("use ksu");
-		$stm1->execute();
-		
-		$stm = $pdo->prepare("SELECT `link` FROM `repo_shevchenko`");
-		$stm->execute();
-		$i = 0;
 
-		for ($j = 0; $j < count($n); $j++){
-	
-					$p = addslashes($a[$j]);
-					$p1 = addslashes($res[$j]);
-					$p2 = addslashes($spec[$j]);
-					$p3 = addslashes($link[$j]);
-					if ($p2 == '01.05.02' || $p2 == '05.13.06' || $p2 == '05.13.23'){
-						$p2 = $p2 . '/' . $type[$j];
-						if (hasRow($p1, $pdo, 'repo_shevchenko') === true){
-								$stm1 = $pdo->prepare("INSERT INTO `repo_shevchenko` VALUES(NULL, '$p','$p1', '$p3', '$p2', '$year[$j]')");
-								$stm1->execute();
-							
-						}
-					}
-		}	
+	$_data = new Data($a, $res, $spec, $year, [], $link, $type);
+	$this->basic->_data = $_data;
 	}
 }
+
+	$sheva = new ShevchenkoProvider();
+	$sheva->load("http://cyb.univ.kiev.ua/uk/library.dissertations.html");
+	//$sheva->load("sheva.htm");
+	$sheva->parse();
+	$sheva->basic->save($pdo, "repo_shevchenko");
 
  

@@ -1,14 +1,17 @@
-<head><link rel = "stylesheet" href = "css/semantic.min.css"> </head>
+<head><link rel = "stylesheet" href = "css/semantic.min.css"> <meta charset = "utf-8"></head>
 <div id="premial">
 <div class="ui huge icon input" style = "margin-top: 20px;">
   <input class="search" type="text" placeholder="Search">
 </div>
+
 		<?php
 				
 		require_once('/settings.php');
 
-		$stm1 = $pdo->prepare("use inaeksu_ksu");
-		//$stm1 = $pdo->prepare("use ksu");
+		//$stm1 = $pdo->prepare("use inaeksu_ksu");
+
+		$stm1 = $pdo->prepare("use ksu");
+
 		$stm1->execute();
 
 		$stm1 = $pdo->prepare("SELECT COUNT(*) as count FROM `repo_nbuv_math`");
@@ -42,13 +45,18 @@
 		Усього дисертацій: <?php echo $count ?>
 
 
+
 	<table  id="myTable" class="ui celled table tablesorter">
+
+	
+
 
         <thead> 
              
             <tr><th>ID </th>
             <th>Автор</th>
             <th>Тема дисертації</th>
+			<th>Тип</th>
             <th>Рік</th>
             <th>Додаткова інформація</th>
 			<th>Спеціальність</th>
@@ -60,9 +68,14 @@
 <tbody>
 			
 	<?php
+
 				$i = 1;
-		$stm1 = $pdo->prepare("use inaeksu_ksu");
-		//$stm1 = $pdo->prepare("use ksu");
+		//$stm1 = $pdo->prepare("use inaeksu_ksu");
+		$stm1 = $pdo->prepare("use ksu");
+
+				
+		//$stm1 = $pdo->prepare("use inaeksu_ksu");
+
 		$stm1->execute();
 		$stm = $pdo->prepare("SELECT * FROM `repo_nbuv_math`");
 		$stm->execute();
@@ -74,7 +87,8 @@
 				<tr>
 					<td class=\"id\">".$i."</td>
 					<td class=\"author\">".$res['author']."</td>
-					<td class=\"theme\">".$res['title']. '(' . $tmp[1]. ')'."</td>
+					<td class=\"theme\">".$res['title']."</td>
+					<td class=\"theme\">".$tmp[1]."</td>
 					<td class=\"year\">".$res['year']."</td>
 					<td class=\"year\">".$res['info']."</td>
 					<td class=\"year\">Математичне моделювання</td>
@@ -95,7 +109,8 @@
 				<tr>
 					<td class=\"id\">".$i."</td>
 					<td class=\"author\">".$res['author']."</td>
-					<td class=\"theme\">".$res['title']. '(' . $tmp[1]. ')'."</td>
+					<td class=\"theme\">".$res['title']."</td>
+					<td class=\"theme\">".$tmp[1]."</td>
 					<td class=\"year\">".$res['year']."</td>
 					<td class=\"year\">".$res['info']."</td>
 					<td class=\"year\">Інформаційні технології</td>
@@ -114,7 +129,8 @@
 				<tr>
 					<td class=\"id\">".$i."</td>
 					<td class=\"author\">".$res['author']."</td>
-					<td class=\"theme\">".$res['title']. '(' . $tmp[1]. ')'."</td>
+					<td class=\"theme\">".$res['title']."</td>
+					<td class=\"theme\">".$tmp[1]."</td>
 					<td class=\"year\">".$res['year']."</td>
 					<td class=\"year\">".$res['info']."</td>
 					<td class=\"year\">Штучний інтелект</td>
@@ -129,7 +145,6 @@
 		
 		$stm = $pdo->prepare("SELECT * FROM `repo_shevchenko`");
 		$stm->execute();
-       
 		while ($res=$stm->fetch())
 		{
 			$tmp = explode('/', $res['number']);
@@ -140,9 +155,10 @@
 				<tr>
 					<td>".$i."</td>
 					<td>".$res['author']."</td>
-					<td>".$res['title']. '(' . $tmp[1]. ')'."</td>
+					<td>".$res['title']."</td>
+					<td class=\"theme\">".$tmp[1]."</td>
 					<td>".$res['year']."</td>
-					<td>Університет Шевченка</td>
+					<td>Київський національний університет імені Тараса Шевченка</td>
 					<td>".$s."</td>
 					<td><a ".$res['link'].">Aнотація</a></td>
 				</tr> 
@@ -155,7 +171,9 @@
 		$stm = $pdo->prepare("SELECT * FROM `repo_ONPU`");
 		$stm->execute();
 
+
 		
+
 		while ($res=$stm->fetch())
 		{
 			$tmp = explode('/', $res['number']);
@@ -167,8 +185,9 @@
 					<td class=\"id\">".$i."</td>
 					<td class=\"author\">".$res['author']."</td>
 					<td class=\"theme\">".$res['title']."</td>
+					<td class=\"theme\">".$tmp[1]."</td>
 					<td class=\"year\">".$res['year']."</td>
-					<td class=\"year\">Одеський політехнічний університет</td>
+					<td class=\"year\">Одеський національний технічний університет</td>
 					<td class=\"year\">".$s."</td>
 					<td class=\"year\"><a ".$res['link'].">Aнотація</a></td>
 				</tr> 
