@@ -1,4 +1,10 @@
 <?php
+require_once('../settings.php');
+				require_once('hasRow.php');
+				require_once('BasicProvider.php');
+				require_once('Data.php');
+				
+	
 	class VernProvider extends BasicProvider{
 		public $basic;
 		private $url;
@@ -187,6 +193,7 @@
 		
 	}
 }
+
 
 
 $i = 1;

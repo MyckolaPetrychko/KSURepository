@@ -1,5 +1,9 @@
 <?php
-require_once('BasicProvider.php');
+require_once('../settings.php');
+				require_once('hasRow.php');
+				require_once('BasicProvider.php');
+				require_once('Data.php');
+			
 	class ShevchenkoProvider extends BasicProvider{
 		private $dom;
 		public $basic;

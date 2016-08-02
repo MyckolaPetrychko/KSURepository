@@ -45,7 +45,7 @@
 							$p3 = addslashes($this->_data->year[$j]);
 							$p4 = addslashes($this->_data->info[$j]);
 							$p5 = addslashes($this->_data->download[$j]);
-							echo $this->_data->type[$j]. ' ' .$this->_data->author[$j] .'<br>';
+							
 							if (hasRow($p1, $pdo, $table) === true){
 								if (!empty($this->_data->author[$j])){
 									$stm1 = $pdo->prepare("INSERT INTO `$table` VALUES(NULL, '$p','$p1', '$p2', '$p3', '$p4', '$p5')");

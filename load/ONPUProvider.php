@@ -1,4 +1,10 @@
 <?php
+require_once('../settings.php');
+				require_once('hasRow.php');
+				require_once('BasicProvider.php');
+				require_once('Data.php');
+				
+				
 	class ONPUProvider extends BasicProvider{
 		public $dom;
 		public $html1;
@@ -137,6 +143,7 @@
 	}
 }
 
+				
 
 	$onpu = new ONPUProvider();
 	$onpu->load("onpu.html");
